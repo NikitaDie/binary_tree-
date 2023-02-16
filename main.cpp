@@ -91,7 +91,7 @@ private:
         if (current == nullptr)
             return nullptr;     //TODO throw exception
 
-        if (value >= current->getValue())
+       if (value >= current->getValue())
         {
             current = current->getRight();
         }
@@ -103,7 +103,9 @@ private:
     }
 
 public:
-    Tree() = default;
+    Tree() :
+        root{ nullptr }
+    {}
 
     Node* getRoot()
     {
@@ -159,7 +161,7 @@ public:
 
         if (current->getValue() == value)
             return current;
-
+    
         current = chooseNextPosition(current, value);
         find(value, current);
     }
