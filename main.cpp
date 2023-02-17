@@ -155,15 +155,6 @@ public:
         }
     }
 
-    const Node* getNext(Node* current) const // ?
-    {
-        if (current == nullptr)
-            return nullptr;     //TODO throw exception
-
-        return(current->getLeft());
-
-    }
-
     const Node* getPrev(Node* current) const //?
     {
         if (current == nullptr)
@@ -197,6 +188,42 @@ public:
         }
 
         std::cout << "This Node is the first." << std::endl;
+        return nullptr;
+    }
+
+    const Node* getNext(Node* current) const //?
+    {
+        if (current == nullptr)
+            return nullptr;   //TODO throw exception
+
+        if (current->getRight() != nullptr)
+        {
+            current = current->getRight();
+
+            while(current->getLeft() != nullptr)
+            {
+                current = current->getLeft();
+            }
+
+            return current;
+        }
+
+        if (current->getKey() == left_key)
+        {
+            return current->getPrev();
+        }
+
+        while(current != this->root)
+        {
+            int tmp = current->getValue();
+
+            current = current->getPrev();
+
+            if(current->getValue() > tmp)
+                return current;
+        }
+
+        std::cout << "This Node is the last." << std::endl;
         return nullptr;
     }
 
@@ -262,5 +289,6 @@ int main()
 
     //Node* tmp = tree.find(1, tree.getRoot());
 
-    std::cout << tree.getPrev(tree.find(55, tree.getRoot()))->getValue() << std::endl;
+    //std::cout << tree.getPrev(tree.find(55, tree.getRoot()))->getValue() << std::endl;
+    std::cout << tree.getNext(tree.find(32, tree.getRoot()))->getValue() << std::endl;
 }
