@@ -1,5 +1,11 @@
 #include <iostream>
 
+enum {
+    root_key = 0,
+    right_key = 1,
+    left_key = 2
+};
+
 class Node
 {
 private:
@@ -7,16 +13,18 @@ private:
     Node* right;
     Node* left;
     Node* prev;
+    int key;
 
 public:
     Node(int value) :
         value{ value },
         right{ nullptr },
         left{ nullptr },
-        prev{ nullptr }
+        prev{ nullptr },
+        key{ root_key }
     {}
 
-    Node(const Node& node) :
+    Node(const Node& node) : //?
         value{ node.value },
         right{ nullptr },
         left{ nullptr },
@@ -32,12 +40,14 @@ public:
     {
         this->right = new_right;
         this->right->prev = this;
+        new_right->key = right_key;
     }
 
     void setLeft(Node* new_left)
     {
         this->left = new_left;
         this->left->prev = this;
+        new_left->key = left_key;
     }
 
     const int& getValue() const
@@ -59,6 +69,11 @@ public:
     {
         return this->prev;
     };
+
+    int getKey() const
+    {
+        return this->key;
+    }
 
     friend std::ostream& operator<<(std::ostream& os, const Node& node);
 
@@ -149,6 +164,42 @@ public:
 
     }
 
+    const Node* getPrev(Node* current) const //?
+    {
+        if (current == nullptr)
+            return nullptr;   //TODO throw exception
+
+        if (current->getLeft() != nullptr)
+        {
+            current = current->getLeft();
+
+            while(current->getRight() != nullptr)
+            {
+                current = current->getRight();
+            }
+
+            return current;
+        }
+
+        if (current->getKey() == right_key)
+        {
+            return current->getPrev();
+        }
+
+        while(current != this->root)
+        {
+            int tmp = current->getValue();
+
+            current = current->getPrev();
+
+            if(current->getValue() < tmp)
+                return current;
+        }
+
+        std::cout << "This Node is the first." << std::endl;
+        return nullptr;
+    }
+
     Node* find(int value, Node* root) //this->root = root;
     {
         Node* current{ root };
@@ -200,15 +251,16 @@ int main()
     tree.insert(45);
     tree.insert(55);
     tree.insert(34);
-    tree.insert(1);
     tree.insert(28);
+    tree.insert(30);
+    tree.insert(29);
+    tree.insert(32);
 
     tree.printTree(tree.getRoot());
 
     std::cout << std::endl;
 
-    Node* tmp = tree.find(1, tree.getRoot());
+    //Node* tmp = tree.find(1, tree.getRoot());
 
-    std::cout << tree.find(1, tree.getRoot())->getPrev()->getValue() << std::endl;
-
+    std::cout << tree.getPrev(tree.find(55, tree.getRoot()))->getValue() << std::endl;
 }
