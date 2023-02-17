@@ -1,11 +1,12 @@
 #include <iostream>
 
 enum {
-    root_key = 0,
-    right_key = 1,
-    left_key = 2
+    s_root = 0,
+    s_right = 1,
+    s_left = 2
 };
 
+//template <class T, class K>
 class Node
 {
 private:
@@ -13,7 +14,8 @@ private:
     Node* right;
     Node* left;
     Node* prev;
-    int key;
+    int side;
+    //K key;
 
 public:
     Node(int value) :
@@ -21,15 +23,15 @@ public:
         right{ nullptr },
         left{ nullptr },
         prev{ nullptr },
-        key{ root_key }
+        side{ s_root }
     {}
 
-    Node(const Node& node) : //?
+    /*Node(const Node& node) : //?
         value{ node.value },
         right{ nullptr },
         left{ nullptr },
         prev{ nullptr }
-    {}
+    {}*/
 
     void setValue(const int& new_value)
     {
@@ -40,14 +42,14 @@ public:
     {
         this->right = new_right;
         this->right->prev = this;
-        new_right->key = right_key;
+        new_right->side = s_right;
     }
 
     void setLeft(Node* new_left)
     {
         this->left = new_left;
         this->left->prev = this;
-        new_left->key = left_key;
+        new_left->side = s_left;
     }
 
     const int& getValue() const
@@ -70,9 +72,9 @@ public:
         return this->prev;
     };
 
-    int getKey() const
+    int getside() const
     {
-        return this->key;
+        return this->side;
     }
 
     friend std::ostream& operator<<(std::ostream& os, const Node& node);
@@ -155,7 +157,7 @@ public:
         }
     }
 
-    const Node* getPrev(Node* current) const //?
+    const Node* getPrev(Node* current) const
     {
         if (current == nullptr)
             return nullptr;   //TODO throw exception
@@ -172,7 +174,7 @@ public:
             return current;
         }
 
-        if (current->getKey() == right_key)
+        if (current->getside() == s_right)
         {
             return current->getPrev();
         }
@@ -191,7 +193,7 @@ public:
         return nullptr;
     }
 
-    const Node* getNext(Node* current) const //?
+    const Node* getNext(Node* current) const
     {
         if (current == nullptr)
             return nullptr;   //TODO throw exception
@@ -208,7 +210,7 @@ public:
             return current;
         }
 
-        if (current->getKey() == left_key)
+        if (current->getside() == s_left)
         {
             return current->getPrev();
         }
@@ -227,7 +229,7 @@ public:
         return nullptr;
     }
 
-    Node* find(int value, Node* root) //this->root = root;
+    Node* find(int value, Node* root) 
     {
         Node* current{ root };
 
@@ -244,7 +246,7 @@ public:
         find(value, current);
     }
 
-    void printTree(Node* root) //root = this->root
+    void printTree(Node* root)
     {
 
         if (root != nullptr)
