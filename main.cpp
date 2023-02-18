@@ -210,29 +210,46 @@ public:
             return;
         }
 
-        Node<T>* tmp{ this->getNext(current) };
+        Node<T>* tmp{};
 
         if (current->getRight() != nullptr && current->getLeft() != nullptr)
         {
+            
+            tmp = this->getNext(current);
+
+            /*if(tmp == nullptr)              //?
+                tmp = current->getLeft();*/
 
             if (tmp->getSide() == s_right)
                 tmp->getPrev()->setRight(nullptr);
-            else
+
+            else if (tmp->getSide() == s_left)
                 tmp->getPrev()->setLeft(nullptr);
+
+            /*else
+                this->root = nullptr;*/
 
             tmp->setRight(current->getRight());
             tmp->setLeft(current->getLeft());
 
         }
+        else
+        {
+            tmp = current->getRight();
+
+            if (tmp == nullptr)
+                tmp = current->getLeft();
+
+        }
 
         if (current->getSide() == s_right)
-        {
             current->getPrev()->setRight(tmp);
-        } 
+
         else if (current->getSide() == s_left)
-        {
             current->getPrev()->setLeft(tmp);
-        }
+
+        else
+            this->root = tmp;
        
         tmp->setPrev(current->getPrev());
 
@@ -391,6 +408,24 @@ int main()
     tree.printTree(tree.getRoot());
     std::cout << std::endl;
 
-    tree.remove(58);
+    tree.remove(89);
     tree.printTree(tree.getRoot());
+
+    /*tree.insert(38);
+    tree.insert(45);
+    tree.insert(94);
+    tree.insert(68);
+
+    tree.remove(38);
+
+    tree.printTree(tree.getRoot());*/
+
+    /*tree.insert(38);
+    tree.insert(20);
+    tree.insert(31);
+    tree.insert(32);
+    tree.insert(29);
+
+    tree.remove(38);
+    tree.printTree(tree.getRoot());*/
 }
