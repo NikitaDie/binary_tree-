@@ -206,6 +206,12 @@ public:
 
         if (isLeaf(current))
         {
+            if (current->getSide() == s_right)
+                current->getPrev()->setRight(nullptr);
+
+            else if (current->getSide() == s_left)
+                current->getPrev()->setLeft(nullptr);
+                
             delete current;
             return;
         }
